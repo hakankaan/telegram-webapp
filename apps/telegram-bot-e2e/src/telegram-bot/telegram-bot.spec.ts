@@ -1,4 +1,3 @@
-import TelegramBot from 'node-telegram-bot-api';
 import TelegramServer from 'telegram-test-api';
 
 import { TelegramClient } from 'telegram-test-api/lib/modules/telegramClient';
