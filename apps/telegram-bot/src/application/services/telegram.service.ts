@@ -7,6 +7,8 @@ export class TelegramService {
   initializeHandlers() {
     this.telegramClient.onText(/\/start/, async (msg) => {
       try {
+        console.log("🚀 ~ TelegramService ~ this.telegramClient.onText ~ msg:", msg)
+        
         const chatId = msg.chat.id;
         const firstName = msg.from?.first_name || '';
   

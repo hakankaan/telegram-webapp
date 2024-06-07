@@ -41,6 +41,7 @@
     "drizzle-orm": "^0.31.1",
     "node-telegram-bot-api": "^0.66.0",
     "pg": "^8.12.0",
+    "telegram-test-api": "^4.2.1",
     "tslib": "^2.3.0"
   }
 }

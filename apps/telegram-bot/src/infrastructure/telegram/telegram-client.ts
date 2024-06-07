@@ -4,8 +4,7 @@ export class TelegramClient {
   private bot: TelegramBot;
 
   constructor(token: string) {
-    // @ts-expect-error testEnvironment is valid option but not in the types yet
-    this.bot = new TelegramBot(token, { polling: true, testEnvironment: false});
+    this.bot = new TelegramBot(token, { polling: true, baseApiUrl: process.env.TELEGRAM_API_URL });
   }
 
   onText(regex: RegExp, callback: (msg: TelegramBot.Message, match: RegExpExecArray | null) => void) {
@@ -15,4 +14,5 @@ export class TelegramClient {
   sendMessage(chatId: number | string, text: string, options?: TelegramBot.SendMessageOptions) {
     this.bot.sendMessage(chatId, text, options);
   }
+
 }
