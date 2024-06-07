@@ -30,6 +30,25 @@ export class TelegramService {
       }
     });
 
-    
+    this.telegramClient.onText(/\/adminhello (\d+) (.+)/, async (msg, match) => {
+      try {
+        const chatId = msg.chat.id;
+        const adminIds = ['5625744975', 'ADMIN_TELEGRAM_ID_2'];
+  
+        if (!adminIds.includes(chatId.toString())) {
+          this.telegramClient.sendMessage(chatId, 'Unauthorized');
+          return;
+        }
+  
+        const userId = match?.[1];
+        const message = match?.[2];
+  
+        if (userId && message) {
+          this.telegramClient.sendMessage(parseInt(userId), message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
   }
 }
