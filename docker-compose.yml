@@ -1,0 +1,28 @@
+name: telegram-webapp
+services:
+  telegram-bot-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: telegram_bot
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - telegram_bot_db_data:/var/lib/postgresql/data
+
+  telegram-bot-app:
+    build:
+      context: .
+      dockerfile: ./apps/telegram-bot/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - telegram-bot-db
+    environment:
+      DATABASE_URL: "postgresql://user:password@telegram-bot-db:5432/telegram_bot"
+      TELEGRAM_BOT_TOKEN: "6777902081:AAEqeODPNXbyfvNm_bnPrAihFfgnTdE6y1I"
+
+
+volumes:
+  telegram_bot_db_data:

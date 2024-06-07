@@ -1,12 +1,18 @@
-import { execSync } from 'child_process';
-import { join } from 'path';
 
-describe('CLI tests', () => {
-  it('should print a message', () => {
-    const cliPath = join(process.cwd(), 'dist/apps/telegram-bot');
 
-    const output = execSync(`node ${cliPath}`).toString();
+describe('Telegram Bot E2E Tests', () => {
+ 
 
-    expect(output).toMatch(/Hello World/);
+  it('should register a new user and send button to open web application', async () => {
+
   });
+
+  it('should allow admin to send a message to a user', async () => {
+    
+  });
+
+  it('should not allow non-admin to send an admin message', async () => {
+   
+});
+
 });
