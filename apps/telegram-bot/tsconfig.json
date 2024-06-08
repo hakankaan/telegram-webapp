@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": ["../../tsconfig.base.json", "@tsconfig/svelte/tsconfig.json"],
   "files": [],
-  "include": [],
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
   "references": [
     {
       "path": "./tsconfig.app.json"
