@@ -22,8 +22,8 @@ services:
     environment:
       DATABASE_URL: "postgresql://user:password@telegram-bot-db:5432/telegram_bot"
       TELEGRAM_BOT_TOKEN: "6777902081:AAEqeODPNXbyfvNm_bnPrAihFfgnTdE6y1I"
-      # TELEGRAM_API_URL: "https://api.telegram.org/"
       TELEGRAM_API_URL: "http://localhost:9001"
+      # TELEGRAM_API_URL: "https://api.telegram.org/"
 
   web-app-db:
     image: postgres:latest
@@ -35,6 +35,16 @@ services:
       - "5433:5432"
     volumes:
       - web_app_db_data:/var/lib/postgresql/data
+  
+  web-app:
+    build:
+      context: .
+      dockerfile: ./apps/web-app/Dockerfile
+    ports:
+      - "5005:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
 
 
 volumes:

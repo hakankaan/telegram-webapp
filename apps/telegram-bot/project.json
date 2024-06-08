@@ -55,6 +55,14 @@
     "docker-build": {
       "dependsOn": ["build"],
       "command": "docker build -f apps/telegram-bot/Dockerfile . -t telegram-bot"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/telegram-bot"],
+      "options": {
+        "jestConfig": "apps/telegram-bot/jest.config.ts",
+        "passWithNoTests": true
+      }
     }
   }
 }
