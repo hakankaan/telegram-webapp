@@ -36,18 +36,24 @@ export class TelegramService {
       try {
         const chatId = msg.chat.id;
         const adminIds = ['5625744975', 'ADMIN_TELEGRAM_ID_2'];
-  
+        console.log("🚀 ~ TelegramService ~ this.telegramClient.onText ~ chatId", JSON.stringify(msg, null, 2))
+        
         if (!adminIds.includes(chatId.toString())) {
           this.telegramClient.sendMessage(chatId, 'Unauthorized');
           return;
         }
-  
+        
+        console.log("🚀 ~ TelegramService ~ this.telegramClient.onText ~ match:", match)
         const userId = match?.[1];
         const message = match?.[2];
-  
-        if (userId && message) {
-          this.telegramClient.sendMessage(parseInt(userId), message);
+
+        const hasUserAndMessage = userId && message;
+        if (!hasUserAndMessage) {
+          throw new Error('Invalid command');
         }
+
+        this.telegramClient.sendMessage(parseInt(userId), message);
+        console.log("message sent")
       } catch (error) {
         console.error(error);
       }

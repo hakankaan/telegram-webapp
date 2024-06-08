@@ -5,6 +5,13 @@ export class TelegramClient {
 
   constructor(token: string) {
     this.bot = new TelegramBot(token, { polling: true, baseApiUrl: process.env.TELEGRAM_API_URL });
+
+    this.bot.on('polling_error', (error) => {
+      if (process.env.TELEGRAM_API_URL.includes('localhost')) {
+        return
+      }
+      throw error
+    })
   }
 
   onText(regex: RegExp, callback: (msg: TelegramBot.Message, match: RegExpExecArray | null) => void) {
