@@ -25,6 +25,18 @@ services:
       # TELEGRAM_API_URL: "https://api.telegram.org/"
       TELEGRAM_API_URL: "http://localhost:9001"
 
+  web-app-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: web_app
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - web_app_db_data:/var/lib/postgresql/data
+
 
 volumes:
   telegram_bot_db_data:
+  web_app_db_data:

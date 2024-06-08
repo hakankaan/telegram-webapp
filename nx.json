@@ -30,7 +30,7 @@
     },
     "@nx/vite:test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     },
     "@nx/vite:build": {
       "cache": true,
@@ -52,6 +52,15 @@
       },
       "exclude": ["apps/telegram-bot-e2e/**/*"]
     },
-    "@nxext/svelte"
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "vite:build",
+        "testTargetName": "test",
+        "serveTargetName": "vite:serve",
+        "previewTargetName": "vite:preview",
+        "serveStaticTargetName": "serve-static"
+      }
+    }
   ]
 }

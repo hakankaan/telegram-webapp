@@ -1,7 +1,8 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { UserRepository } from "../../application/interfaces";
 import * as schema from '../db/schema'
-import { randomUUID } from "crypto";
+import { generateUuid } from "@telegram-webapp/shared-utils";
+
 
 
 export class UserRepositoryImpl implements UserRepository {
@@ -9,7 +10,7 @@ export class UserRepositoryImpl implements UserRepository {
 
   async saveUser(telegramId: string, firstName: string) {
     await this.db.insert(schema.users).values({
-      id: randomUUID(),
+      id: generateUuid(),
       telegramId,
       firstName,
     });

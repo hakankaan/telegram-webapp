@@ -64,10 +64,11 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/web-app"],
       "options": {
-        "reportsDirectory": "../../coverage/apps/web-app"
+        "jestConfig": "apps/web-app/jest.config.ts",
+        "passWithNoTests": true
       }
     }
   }
