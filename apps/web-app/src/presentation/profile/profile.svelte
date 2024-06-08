@@ -1,9 +1,7 @@
 
 <script lang="ts">
-  import { UserRepositoryImpl } from '../../infrastructure/repositories';
-  import { AuthServiceImpl } from '../../application/services';
   import type { User } from '../../domain/entities/user';
-  import { localStorage } from '../../infrastructure/local-storage';
+  import { container } from '../../application/di';
 
   let telegramId = '';
   let password = '';
@@ -12,8 +10,7 @@
   let isTokenValid = false;
   let user: User | undefined;
 
-  const userRepository = new UserRepositoryImpl(localStorage);
-  const authService = new AuthServiceImpl(userRepository);
+  const { authService, userRepository } = container;
 
   async function login() {
     try {

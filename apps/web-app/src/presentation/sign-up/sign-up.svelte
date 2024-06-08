@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { UserRepositoryImpl } from '../../infrastructure/repositories';
-  import { AuthServiceImpl } from '../../application/services';
-  import { localStorage } from '../../infrastructure/local-storage';
+  import { container } from '../../application/di';
 
   let telegramId = '';
   let password = '';
   let token = '';
 
-  const userRepository = new UserRepositoryImpl(localStorage);
-  const authService = new AuthServiceImpl(userRepository);
+
+  const authService = container.authService
 
   async function signUp() {
     token = await authService.signUp(telegramId, password);
