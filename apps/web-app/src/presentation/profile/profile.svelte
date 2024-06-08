@@ -1,29 +1,42 @@
+
 <script lang="ts">
-  import { UserRepositoryImpl } from '../../infrastructure/repositories/user.repository';
+  import { UserRepositoryImpl } from '../../infrastructure/repositories';
   import { AuthServiceImpl } from '../../application/services';
-  import type { User } from '../../domain/entities';
+  import type { User } from '../../domain/entities/user';
   import { localStorage } from '../../infrastructure/local-storage';
 
   let telegramId = '';
   let password = '';
   let token = '';
   let isLoggedIn = false;
-  let user: User;
+  let isTokenValid = false;
+  let user: User | undefined;
 
   const userRepository = new UserRepositoryImpl(localStorage);
   const authService = new AuthServiceImpl(userRepository);
 
   async function login() {
-    isLoggedIn = await authService.login(telegramId, password);
-    if (isLoggedIn) {
-      user = await userRepository.findByTelegramId(telegramId);
+    try {
+      isLoggedIn = await authService.login(telegramId, password);
+      if (isLoggedIn) {
+        user = await userRepository.findByTelegramId(telegramId);
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   }
 
   async function validateToken() {
-    const isValid = await authService.validateToken(telegramId, token);
-    if (!isValid) {
+    try {
+      isTokenValid = await authService.validateToken(telegramId, token);
+      if (!isTokenValid) {
+        isLoggedIn = false;
+        user = undefined;
+      }
+    } catch (error) {
+      console.error("Token validation failed:", error);
       isLoggedIn = false;
+      user = undefined;
     }
   }
 </script>
@@ -43,7 +56,7 @@
       <button type="submit">Login</button>
     </form>
   {/if}
-  {#if isLoggedIn}
+  {#if isLoggedIn && !isTokenValid}
     <h1>Token Validation</h1>
     <form on:submit|preventDefault={validateToken}>
       <label>
@@ -53,7 +66,7 @@
       <button type="submit">Validate Token</button>
     </form>
   {/if}
-  {#if user}
+  {#if isLoggedIn && isTokenValid && user}
     <div>
       <h2>User Profile</h2>
       <p>Telegram ID: {user.telegramId}</p>
@@ -62,3 +75,11 @@
     </div>
   {/if}
 </main>
+
+<style>
+  main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+</style>
