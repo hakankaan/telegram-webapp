@@ -52,3 +52,9 @@ To reach the web application, open your web browser and navigate to:
 
 - Open `telegram.service.ts` file in the directory.
 - Edit the `adminIds` array with your Telegram user ID.
+
+## The Telegram Bot
+
+To open the Telegram bot, please click the link below:
+
+https://t.me/Simple274139721Bot
