@@ -1,5 +1,3 @@
-<!-- gets user first name from query param and prints to screen "Hello, {firstname}!" -->
-
 <script>
   import { onMount } from 'svelte';
 

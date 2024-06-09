@@ -1,6 +1,6 @@
 name: telegram-webapp
 services:
-  telegram-bot-db:
+  bot-db:
     image: postgres:latest
     environment:
       POSTGRES_DB: telegram_bot
@@ -9,38 +9,44 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - telegram_bot_db_data:/var/lib/postgresql/data
+      - bot_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d telegram_bot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  telegram-bot-app:
-    image: hakankaan/telegram-bot:latest
+  bot-migrations:
+    build:
+      context: .
+      dockerfile: ./apps/telegram-bot/Dockerfile
+      target: builder
+    depends_on:
+      bot-db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    entrypoint: ["npx", "drizzle-kit", "migrate"]
+
+  bot-app:
     build:
       context: .
       dockerfile: ./apps/telegram-bot/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      - telegram-bot-db
+      bot-db:
+        condition: service_healthy
+      bot-migrations:
+        condition: service_completed_successfully
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_API_URL=${TELEGRAM_API_URL}
       - WEB_APP_URL=${WEB_APP_URL}
 
-  telegram-bot-migrations:
-    image: hakankaan/telegram-bot:latest
-    build:
-      context: .
-      dockerfile: ./apps/telegram-bot/Dockerfile
-      target: builder
-    depends_on:
-      - telegram-bot-db
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-    entrypoint: ["npx", "drizzle-kit", "migrate"]
-
   
   web-app:
-    image: hakankaan/web-app:latest
     build:
       context: .
       dockerfile: ./apps/web-app/Dockerfile
@@ -52,4 +58,4 @@ services:
 
 
 volumes:
-  telegram_bot_db_data:
+  bot_db_data:

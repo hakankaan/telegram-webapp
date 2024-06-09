@@ -13,7 +13,7 @@ export class TelegramService {
   
         await this.userService.registerUser(chatId.toString(), firstName);
 
-        const url = `${process.env.WEB_APP_URL}/welcome?username=${encodeURIComponent(firstName)}`;
+        const url = `${process.env.WEB_APP_URL}/welcome?firstname=${encodeURIComponent(firstName)}`;
         this.telegramClient.sendMessage(chatId, "Please click on button below to continue", {
           reply_markup: {
             inline_keyboard: [
