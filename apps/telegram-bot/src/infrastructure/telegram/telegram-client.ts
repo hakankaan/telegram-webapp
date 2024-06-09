@@ -7,7 +7,7 @@ export class TelegramClient {
     this.bot = new TelegramBot(token, { polling: true, baseApiUrl: process.env.TELEGRAM_API_URL });
 
     this.bot.on('polling_error', (error) => {
-      if (process.env.TELEGRAM_API_URL.includes('localhost')) {
+      if (process.env.TELEGRAM_API_URL.includes(':9001')) {
         return
       }
       throw error

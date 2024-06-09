@@ -2,6 +2,7 @@
   import { Router, Route, Link } from 'svelte-routing';
   import SignUp from './presentation/sign-up/sign-up.svelte';
   import Profile from './presentation/profile/profile.svelte';
+  import Welcome from './presentation/welcome/welcome.svelte';
   export let url = "";
 </script>
 
@@ -15,6 +16,7 @@
       <Route path="/" component={SignUp} />
       <Route path="signup" component={SignUp} />
       <Route path="profile" component={Profile} />
+      <Route path="welcome" component={Welcome} />
     </div>
   </Router>
 </main>

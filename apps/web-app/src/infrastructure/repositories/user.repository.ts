@@ -2,8 +2,6 @@ import type { UserRepository } from "../../application/interfaces";
 import type { User } from "../../domain/entities";
 import type { localStorage } from "../local-storage";
 
-
-
 export class UserRepositoryImpl implements UserRepository {
   constructor(private storage: typeof localStorage) {}  
 
@@ -22,18 +20,6 @@ export class UserRepositoryImpl implements UserRepository {
   async findByTelegramId(telegramId: string): Promise<User | undefined> {
     const currentUsers = await this.getAllUsers();
     
-    const userRecord = currentUsers.find(user => user.telegramId === telegramId);
-    if (!userRecord) {
-      return undefined;
-    }
-    const userEntity: User = {
-      id: userRecord.id,
-      telegramId: userRecord.telegramId,
-      password: userRecord.password,
-      createdAt: userRecord.createdAt,
-      token: userRecord.token,
-    }
-
-    return userEntity;
+    return currentUsers.find(user => user.telegramId === telegramId);
   }
 }

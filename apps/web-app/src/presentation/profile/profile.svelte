@@ -1,7 +1,7 @@
-
 <script lang="ts">
-  import type { User } from '../../domain/entities/user';
   import { container } from '../../application/di';
+  import type { User } from '../../domain/entities/user';
+  import { UserNotFoundError } from '../../application/errors';
 
   let telegramId = '';
   let password = '';
@@ -9,16 +9,26 @@
   let isLoggedIn = false;
   let isTokenValid = false;
   let user: User | undefined;
+  let errorMessage = '';
 
-  const { authService, userRepository } = container;
+  const authService = container.authService;
+  const userRepository = container.userRepository;
 
   async function login() {
     try {
       isLoggedIn = await authService.login(telegramId, password);
       if (isLoggedIn) {
         user = await userRepository.findByTelegramId(telegramId);
+        errorMessage = '';
+      } else {
+        errorMessage = 'Invalid credentials';
       }
     } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        errorMessage = 'User not found';
+      } else {
+        errorMessage = 'An error occurred during login';
+      }
       console.error("Login failed:", error);
     }
   }
@@ -29,8 +39,12 @@
       if (!isTokenValid) {
         isLoggedIn = false;
         user = undefined;
+        errorMessage = 'Invalid token';
+      } else {
+        errorMessage = '';
       }
     } catch (error) {
+      errorMessage = 'An error occurred during token validation';
       console.error("Token validation failed:", error);
       isLoggedIn = false;
       user = undefined;
@@ -52,6 +66,9 @@
       </label>
       <button type="submit">Login</button>
     </form>
+    {#if errorMessage}
+      <p class="error">{errorMessage}</p>
+    {/if}
   {/if}
   {#if isLoggedIn && !isTokenValid}
     <h1>Token Validation</h1>
@@ -62,6 +79,9 @@
       </label>
       <button type="submit">Validate Token</button>
     </form>
+    {#if errorMessage}
+      <p class="error">{errorMessage}</p>
+    {/if}
   {/if}
   {#if isLoggedIn && isTokenValid && user}
     <div>
@@ -78,5 +98,8 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 2rem;
+  }
+  .error {
+    color: red;
   }
 </style>

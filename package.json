@@ -2,10 +2,7 @@
   "name": "@telegram-webapp/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "generate": "drizzle-kit generate",
-    "migrate": "drizzle-kit migrate"
-  },
+  "scripts": {},
   "private": true,
   "devDependencies": {
     "@nx/cypress": "18.3.5",
